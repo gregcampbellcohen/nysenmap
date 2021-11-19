@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset=utf-8 />
+  <meta
+  name="viewport"
+  content="initial-scale=1,maximum-scale=1,user-scalable=no"
+/>
+<link
+  href="https://api.mapbox.com/mapbox-assembly/v0.24.0/assembly.min.css"
+  rel="stylesheet"
+/>
+<script src='https://api.mapbox.com/mapbox.js/v2.2.4/mapbox.js'></script>
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+/>
+
+<style>
+  
+  body {
+      margin: 0;
+      padding: 0;
+      background: #6b6b6b;
+      font-family: 'Franklin Gothic', sans-serif;
+      color: #000000;
+  }
+
+  h1 {
+      display: inline-block;
+      color: #140a2e;
+      font-weight: bold;
+      font-size: 25px;
+  }
+
+
+  h2 { width:100%; text-align:center; border-bottom: 1px solid #000; line-height:0.1em; margin:10px 0 20px; font-size: 21px } 
+
+  h2 span { background:#fff; padding:0 10px; }
+
+  h3 {
+      display: inline-block;
+      color: #140a2e;
+      font-size: 21px;
+  }
+
+
+  h4 {
+      display: inline-block;
+      color: #000000;
+      font-size: 17px;
+  }
+
+  h5 {
+      display: inline-block;
+      color: #000000;
+      font-size: 18px;
+  }
+
+  h6 {
+      display: inline-block;
+      color: #140a2e;
+      font-weight: bold;
+      font-size: 35px;
+  }
+
+  #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 84%;
+  }
+
+  .leaflet-tooltip {
+min-width: 300px;
+font-size: 140%;
+white-space: normal;
+}
+
+.leaflet-center {
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+.legend {
+  padding: 6px 6px;
+  font: 14px 'Franklin Gothic', sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  line-height: 24px;
+  color: #555;
+}
+.legend h4 {
+  text-align: center;
+  font-size: 16px;
+  margin: 2px 12px 8px;
+  color: #777;
+}
+
+.legend span {
+  position: relative;
+  bottom: 3px;
+}
+
+.legend i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin: 0 8px 0 0;
+  opacity: 0.7;
+}
+
+.titlebar i.icon {
+  background-size: 18px;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.titlebar {
+  padding: 6px 6px;
+  font: 14px 'Franklin Gothic Demi', sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  color: #555;
+}
+.titlebar h4 {
+  text-align: center;
+  font-size: 16px;
+  margin: 2px 12px 8px;
+  color: #777;
+}
+
+.titlebar span {
+  position: relative;
+  bottom: 3px;
+}
+
+.titlebar i {
+  width: 18px;
+  height: 18px;
+  float: left;
+  margin: 0 8px 0 0;
+  opacity: 0.7;
+}
+
+
+
+.legend i.icon {
+  background-size: 18px;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+  label {
+      font-size: 1.1em;
+      font-weight: bold;
+  }
+
+  footer {
+      padding: 6px;
+      width: 100%;
+      float: center;
+  }
+
+  p {
+      font-size: 1em;
+      color: #000000;
+  }
+
+  .link {
+      font-size: 1em;
+      color: #20651e;
+      font-weight: bold;
+  }
+
+	li {
+    list-style-type: square;
+    list-style-position: outside;
+	margin-left: 1.2em;
+    text-indent: 0em;
+	font-size: 1em;
+}
+
+  .max-image-width {
+			width: 100%;
+		}
+
+    .sidebar {
+        width: 16%
+    }
+    
+</style>
+</head>
+<body>
+  <div class='flex-parent viewport-full relative scroll-hidden'>
+    <div class='sidebar'>
+      <div class='flex-parent flex-parent--column viewport-third h-full-ml hmax-full bg-white py18 px12'>
+        <div class='flex-child flex-child--grow px40 py40 scroll-auto list-style-type: circle'>
+          <h2><span>About Us</span></h2>
+		  <a class='link' href='https://www.chny.org/'>Clean and Healthy New York</a> is an environmental health advocacy organization committed to building a just and healthy society where toxic chemicals are unthinkable. We are proud to provide leadership to two major statewide disease-prevention coalitions: the JustGreen Partnership, a team of 50 organizations representing over a million New Yorkers, and Lead Free Kids New York, a coalition of individuals and organizations working to end childhood lead exposure in New York.
+		  <br><br><a class='link' href='https://www.chny.org/'><img class="max-image-width" src="images/aboutus.jpg" title="Clean and Healthy New York"></a> <br><br>
+		  <h2><span>Key Priorities in 2022</span></h2>
+		  				<ul>
+				<b><li>Safe Personal Care and Cosmetics Act</b> <br> (<a class='link' href='https://www.nysenate.gov/legislation/bills/2021/S3331'>S.3331 Rivera, <i>et al.</i></a>/<a class='link' href='https://www.nysenate.gov/legislation/bills/2021/A143'>A.143 Gottfried, <i>et al.</i></a>)<br>
+				<p>The personal care industry is not legally obligated to disclose certain product ingredients and any health hazards they pose. This disproportionately impacts women of color, who use far more personal and hair care products than white women, and whose personal care products are far more likely to contain toxic ingredients. This legislation mandates the disclosure of ingredients in personal care products and bans the worst of them.</p></li>
+				<b><li>Lead Disclosure at Point of Sale</b> <br> (<a class='link' href='https://www.nysenate.gov/legislation/bills/2021/S2142A'>S.2142A Kavanagh, <i>et al.</i></a>/<a class='link' href='https://www.nysenate.gov/legislation/bills/2021/A6608A'>A.6608A Rivera, <i>et al.</i></a>)<br>
+				<p>New York State has the highest number of residential dwellings in the nation built before lead paint was banned in 1978. Families of children poisoned by lead in residential rental units are often unable to recoup the costs of lead poisoning due to “lead exclusion” clauses in owners’ insurance policies. This legislation would ensure victims can be adequately compensated for medical bills and other lead-exposure related expenses and damages.</p></li>
+				<b><li>PFAS in Common Apparel</b> <br> (<a class='link' href='https://www.nysenate.gov/legislation/bills/2021/6291'>S.6291 Hoylman</a>/<a class='link' href='https://www.nysenate.gov/legislation/bills/2021/A7063'>A.7063 Fahy, <i>et al.</i></a>)<br>
+				<p>PFAS are a class of chemical used across large swathes of product sectors for their resistance to water and stains. They can cause cancer, birth defects, liver disease, thyroid disease, low sperm counts, and more. New York State has already banned PFAS in fire fighting foam and food service ware. This legislation bans its use in most clothing and apparel.</p></li>
+				<b><li>Clearing the Toxic Air</b> <br> (<a class='link' href='https://www.nysenate.gov/legislation/bills/2021/S4371B'>S.4371B Biaggi, <i>et al.</i></a>/<a class='link' href='https://www.nysenate.gov/legislation/bills/2021/A6150'>A.6150 Septimo, <i>et al.</i></a>)<br>
+				<p>This legislation directs the Department of Environmental Conservation to establish air quality standards for toxic contaminants, with a particular emphasis on low income communities and communities of color. It also establishes a community benefit fund which will be used to implement environmental benefits projects in economically distressed or minority communities located near large air contamination sources.</p>
+				<p></p></li>
+				</ul><br>
+		<p>A full list of our priority bills is available <a class='link' href='data/2022 CHNY Priorities for BPRHA Caucus.pdf'>here</a>.</p>
+        </div>
+        <footer class='bg-gray-faint align-center'>
+          <a class='link' href='https://www.chny.org/'><img class="max-image-width" src="images/chny-logo.png" title="Clean and Healthy New York"></a>
+            <p>Map authored by
+              <a class='link' href='mailto:greg@cleanhealthyny.org'>Greg Campbell-Cohen</a>.</p>
+        </footer>
+      </div>
+    </div>
+    <div class='flex-child flex-child--grow viewport-twothirds viewport-full-ml'>
+      <div id="map" class='viewport-twothirds viewport-full-ml'></div>
+    </div>
+  </div>
+</label>
+</div>
+
+<script src="data/customleaflet.js"></script>
+	<script src="data/districts.js"></script>
+	<script src="data/superfund.js"></script>
+  <script src="data/nyrem.js"></script>
+  <script src="data/ghg.js"></script>
+   
+ 	    <script>
+		// map options
+		var options = {
+		  center: [40.828727354465805, -73.85961179058009],
+		  zoom: 7.4,
+		  maxZoom: 18,
+		  minZoom: 8,
+		  dragging: false,
+		  zoomSnap: .2,
+          dragging: true,
+          maxBounds: [ [45.21, -71.887],
+    	[40.5, -79.18] ]
+		};
+  
+		// create a Leaflet map in our division container with id of 'map'
+		var map = L.map("map", options);
+  
+		// Leaflet providers base map URL
+		var basemap_source =
+		  "https://{s}.tile.openstreetmap.de/tiles/osmde/{z}/{x}/{y}.png";
+  
+		// Leaflet providers attributes
+		var basemap_options = {
+		  attribution: 'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC',
+		  subdomains: "abcd",
+		};
+  
+		// request some basemap tiles and add to the map
+		var tiles = L.tileLayer(basemap_source, basemap_options).addTo(map);
+
+		var commonStyles = {
+		  weight: 1,
+		  stroke: 1,
+		  fillOpacity: 2,
+		};
+
+		var districting = L.geoJson(district, {
+		  filter: function (feature) {
+			if (feature.properties) {
+			  return feature;
+			}
+		  }, 
+		  style: function (feature) {
+			if (feature.properties.target)
+			return {
+			  color: "#FFFFFF",
+			  fillColor: "#71b26e",
+			  fillOpacity: .7,
+			} 
+			else {
+			return {
+			  color: "#FFFFFF",
+			  fillColor: "#124d0f",
+			  fillOpacity: .8,
+			};
+		  }},
+		  onEachFeature: function (feature, layer) {
+			if (feature.properties.target) layer.on("mouseover", function () {
+			  layer.setStyle({
+				fillColor: "#d3e9d2",
+				fillOpacity: .7,
+			  });
+			layer.on("mouseout", function () {
+				layer.setStyle({
+				fillColor: "#71b26e",
+				fillOpacity: .8,
+			  })
+			})
+			})
+			else layer.on("mouseover", function () {
+			  layer.setStyle({
+				fillColor: "#d3e9d2",
+				fillOpacity: .7,
+			  }); 
+			 layer.on("mouseout", function () {
+			  layer.setStyle({
+			  fillColor: "#124d0f",
+			  fillOpacity: .8,
+			  });
+			})
+			});
+			layer.bindPopup(
+			  "<b><h3>Assembly District " +
+				layer.feature.properties.DISTRICT +
+				"</b></h3><br>" +
+				"<b><h4>" +
+				layer.feature.properties.NAME +	
+					"</b></big>" +
+				"<br><b>% BIPOC</b> " +
+				layer.feature.properties.bipoc +
+				"<br><b>Party: </b>" +
+				layer.feature.properties.party +
+                "</h3>"
+			);
+		  },
+		  }).addTo(map);
+
+    var superf = L.geoJson(superfund, {
+		  pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, commonStyles);
+		  },
+		  filter: function (feature) {
+			if (feature.properties.state) {
+			  return feature;
+			}
+		  }, 
+		  style: function (feature) {
+			return {
+			  color: "#f4c148",
+			  fillColor: "#ebb42e",
+			  fillOpacity: 1,
+			  radius: 15,
+			  weight: 4,
+			};
+		  },
+		  onEachFeature: function (feature, layer) {
+			layer.on("mouseover", function () {
+			  layer.setStyle({
+				fillColor: "#ffda82",
+				fillOpacity: 1,
+			  });
+			});
+			layer.on("mouseout", function () {
+			  layer.setStyle({
+				fillColor: "#ebb42e",
+				fillOpacity: 1,
+			  });
+			});
+			layer.bindPopup(
+			  "<b><h3>" +
+				layer.feature.properties.name +
+				"</b></h3><br>" +
+				"<h4><b>EPA Superfund Site</b>" +
+				"<br><b>Address: </b>" +
+				layer.feature.properties.address +				
+				"<br><b>Status: </b>" +
+				layer.feature.properties.nplstatus +
+				"<br><b>Hazard Ranking System Score: </b>" +
+				layer.feature.properties.hrsscore +
+                "</h4>" 
+			);
+		  },
+		}).addTo(map);
+
+		var ghge = L.geoJson(ghg, {
+		  pointToLayer: function (feature, latlng) {
+			return L.circleMarker(latlng, commonStyles);
+		  },
+		  filter: function (feature) {
+			if (feature.properties.ghgquant > 0) {
+			  return feature;
+			}
+		  }, 
+		  style: function (feature) {
+			return {
+			  color: "#c88f8f",
+			  fillColor: "#ac5353",
+			  fillOpacity: 1,
+			  radius: 15,
+			  weight: 4,
+			};
+		  },
+		  onEachFeature: function (feature, layer) {
+			layer.on("mouseover", function () {
+			  layer.setStyle({
+				fillColor: "#ead1e0",
+				fillOpacity: 1,
+			  });
+			});
+			layer.on("mouseout", function () {
+			  layer.setStyle({
+				fillColor: "#ac5353",
+				fillOpacity: 1,
+			  });
+			});
+			layer.bindPopup(
+			  "<b><h3>" +
+				layer.feature.properties.facility +
+				"</b></h3><br>" +
+				"<h4><b>EPA Large Greenhouse Gas Emitter</b>" +
+				"<br><b>Address: </b>" +
+				layer.feature.properties.address +			
+				"<br><b>Green House Gas Emissions: </b>" +
+				layer.feature.properties.ghgquant +
+                " metric tons</h4>" 
+			);
+		  },
+		}).addTo(map);
+
+    var nyreme = L.geoJson(nyrem, {
+      style: function(feature) {
+      return {
+      color: '#8474ad',
+      weight: 5,
+      fillOpacity: 1,
+      fillColor: '#6d53ad'
+    };
+    },
+    onEachFeature: function (feature, layer) {
+			layer.on("mouseover", function () {
+			  layer.setStyle({
+				fillColor: "#d9d3e8",
+				fillOpacity: 1,
+			  });
+			});
+			layer.on("mouseout", function () {
+			  layer.setStyle({
+				fillColor: "#6d53ad",
+				fillOpacity: 1,
+			  });
+			});
+			layer.bindPopup(
+			  "<b><h3>" +
+				layer.feature.properties.sitename +
+				"</b></h3><br>" +
+				"<h4><b>NYS DEC Remediation Site</b>" +
+				"<br><b>Address: </b>" +
+				layer.feature.properties.address1 +				
+				"<br><b>Program: </b>" +
+				layer.feature.properties.program +
+				"<br><b>Site Class: </b>" +
+				layer.feature.properties.siteclass +
+                "</h4>" 
+			);
+		  },         
+   }).addTo(map);
+
+		function getRadius(area) {
+		  var radius = Math.sqrt(area/Math.PI);
+		  return radius *.3;
+		}
+
+		var legend = L.control({ position: "bottomright" });
+
+legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h3>Legend</h3><br>";
+  div.innerHTML += '<i style="background: #ebb42e"></i><span><b>EPA Superfund Site<b></span><br>';
+  div.innerHTML += '<i style="background: #ac5353"></i><span><b>EPA Large Greenhouse Gas Emitter</b></span><br>';
+  div.innerHTML += '<i style="background: #6d53ad"></i><span><b>NYSDEC Remediation Site</b></span><br>';
+  return div;
+};
+
+legend.addTo(map);
+
+var titlebar = L.control({ position: "topcenter" });
+
+titlebar.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "titlebar");
+  div.innerHTML += "<h6>Environmental Hazards by Senate District</h6><br>";
+  return div;
+};
+
+titlebar.addTo(map);
+
+
+	  </script>
+
+</body>
+
+</html>
